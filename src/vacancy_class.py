@@ -23,11 +23,15 @@ class Vacancy:
             name = info["name"]
             try:
                 salary_from = info["salary"]["from"]
+                if salary_from == None:
+                    salary_from = 0
             except TypeError:
                 salary_from = 0
 
             try:
                 salary_to = info["salary"]["to"]
+                if salary_to == None:
+                    salary_to = 0
             except TypeError:
                 salary_to = 0
             snippet = info["snippet"]["requirement"]
@@ -39,9 +43,9 @@ class Vacancy:
         return vacancy_object_lst
 
     def __str__(self):
-        if self.salary_from == 0 or self.salary_from == "None":
+        if self.salary_from == 0:
             self.salary_from = "З/п не указана"
-        if self.salary_to == 0 or self.salary_to == "None":
+        if self.salary_to == 0:
             self.salary_to = "З/п не указана"
         return (f"Вакансия: {self.name}\n"
                 f"Зарплата от: {self.salary_from} до: {self.salary_to}\n"
@@ -52,3 +56,5 @@ class Vacancy:
 
     def __gt__(self, other):
         return self.salary_from > other.salary_from
+
+
