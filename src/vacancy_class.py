@@ -1,13 +1,35 @@
-class Vacancy:
+from datetime import datetime
+from abc import ABC, abstractmethod
+
+
+class VacancyAbstractClass(ABC):
+
+    @abstractmethod
+    def cast_to_object_list(self, vacancy: list) -> list:
+        """Содает объекты класса Vacancy из списка json возвращает список обьектов класса"""
+        pass
+
+    @abstractmethod
+    def __str__(self):
+        """Для вывода вакансий в терминал"""
+    pass
+
+    @abstractmethod
+    def __gt__(self, other):
+        """Сравнение объектов по зарплате"""
+    pass
+
+
+class Vacancy(VacancyAbstractClass):
     name: str  # название вакансии
     salary_from: int  # зарплата от
     salary_to: int  # зарплата до
     snippet: str  # описание
     alternate_url: int  # ссылка на вакансию
     published_dat: str  # дата публикации
-    city: str  #  город
+    city: str  # город
 
-    def __init__(self, name, salary_from, salary_to, snippet, alternate_url, published_dat, city ):
+    def __init__(self, name, salary_from, salary_to, snippet, alternate_url, published_dat, city):
         self.name = name
         self.salary_from = salary_from
         self.salary_to = salary_to
@@ -17,25 +39,30 @@ class Vacancy:
         self.city = city
 
     @classmethod
-    def cast_to_object_list(cls, vacancy: list):
+    def cast_to_object_list(cls, vacancy: list) -> list:
+        """Содает объекты класса Vacancy из списка json возвращает список обьектов класса"""
         vacancy_object_lst = []
         for info in vacancy:
             name = info["name"]
             try:
                 salary_from = info["salary"]["from"]
-                if salary_from == None:
+                if salary_from is None:
                     salary_from = 0
             except TypeError:
                 salary_from = 0
 
             try:
                 salary_to = info["salary"]["to"]
-                if salary_to == None:
+                if salary_to is None:
                     salary_to = 0
             except TypeError:
                 salary_to = 0
-            snippet = info["snippet"]["requirement"]
-            published_dat = info["published_at"]
+            try:
+                snippet = (info["snippet"]["requirement"].
+                           replace("<highlighttext>", "-").replace("</highlighttext>", "-"))
+            except AttributeError:
+                snippet = info["snippet"]["requirement"]
+            published_dat = str(datetime.fromisoformat(info["published_at"]).date())
             alternate_url = info["alternate_url"]
             city = info["area"]["name"]
             vacancy_object = cls(name, salary_from, salary_to, snippet, alternate_url, published_dat, city)
@@ -56,5 +83,3 @@ class Vacancy:
 
     def __gt__(self, other):
         return self.salary_from > other.salary_from
-
-
