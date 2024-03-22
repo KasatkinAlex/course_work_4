@@ -14,7 +14,7 @@ def vacancy_test():
 
 
 def test_filter_vacancies(vacancy_test):
-    filter_words = "ok"
+    filter_words = "ок"
     filter_vacancy = filter_vacancies(vacancy_test, filter_words)
     assert len(filter_vacancy) == 2
 

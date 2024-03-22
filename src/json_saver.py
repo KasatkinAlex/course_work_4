@@ -9,6 +9,7 @@ class JSONSaver:
         self.dict = {}
 
     def object_in_json(self, vacancy: Vacancy):
+        """ Создает json для записи его в файл"""
         self.dict["name"] = vacancy.name
         self.dict["salary_from"] = vacancy.salary_from
         self.dict["salary_to"] = vacancy.salary_to
@@ -19,6 +20,7 @@ class JSONSaver:
 
     @staticmethod
     def read_json() -> list:
+        """ Чтение файла и перевод из json"""
         with open("file_vacancy.json", "r", encoding="utf-8") as file:
             try:
                 file_json = json.load(file)
@@ -26,7 +28,8 @@ class JSONSaver:
                 file_json = []
         return file_json
 
-    def add_vacancy(self, vacancy: Vacancy):
+    def add_vacancy(self, vacancy: Vacancy) -> None:
+        """Добавление вакансии в файл"""
         self.object_in_json(vacancy)
         try:
             file_json = self.read_json()
@@ -38,6 +41,7 @@ class JSONSaver:
             json.dump(file_json, file)
 
     def delete_vacancy(self, vacancy):
+        """Удаление вакансии из файла"""
         self.object_in_json(vacancy)
         file_json = self.read_json()
         for i in file_json:
