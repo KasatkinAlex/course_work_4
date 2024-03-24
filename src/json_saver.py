@@ -1,8 +1,34 @@
+from abc import ABC, abstractmethod
 import json
 from src.vacancy_class import Vacancy
 
 
-class JSONSaver:
+class JSONSaverAbstractClass(ABC):
+    """Абстрактный класс для работы с json"""
+
+    @abstractmethod
+    def object_in_json(self, vacancy: Vacancy):
+        """ Создает json для записи его в файл"""
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def read_json() -> list:
+        """ Чтение файла и перевод из json"""
+        pass
+
+    @abstractmethod
+    def add_vacancy(self, vacancy: Vacancy) -> None:
+        """Добавление вакансии в файл"""
+        pass
+
+    @abstractmethod
+    def delete_vacancy(self, vacancy):
+        """Удаление вакансии из файла"""
+        pass
+
+
+class JSONSaver(JSONSaverAbstractClass):
     """ Сохранение вакансий в json файл """
 
     def __init__(self):
